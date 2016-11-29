@@ -17,5 +17,6 @@ urlpatterns = [
     url(r'^', include('GroupsApp.urls')),
 	url(r'^', include('UniversitiesApp.urls')),
 	url(r'^', include('CommentsApp.urls')),
+	url(r'^', include('EngineersApp.urls')),
 	url(r'^', include('TeachersApp.urls')),
 ]
