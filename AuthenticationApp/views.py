@@ -45,8 +45,8 @@ def auth_logout(request):
 	return render(request, 'index.html')
 
 def auth_register(request):
-	if request.user.is_authenticated():
-		return HttpResponseRedirect("/")
+	# if request.user.is_authenticated():
+		# return HttpResponseRedirect("/")
 	
 	form = RegisterForm(request.POST or None)
 	if form.is_valid():

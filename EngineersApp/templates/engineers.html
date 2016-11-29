@@ -1,5 +1,32 @@
 {% extends "body.html" %}
 {% block content %}
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">EngineersApp</a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+        {% if user.is_authenticated == False %}
+          <li><a href="/login">Login</a></li>
+          <li><a href="/register">Register</a></li>
+        {% else %}
+          <li><a href="/engineers">View Engineers</a></li>
+          <li><a href="/engineerform">Create Engineer</a></li>
+        {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+
     <!-- Content -->
     <div class="container" role="main">
         <div class="table-responsive">
@@ -7,14 +34,16 @@
                 <thead>
                     <tr>
                       <th style="width: 20%">Name</th>
+                      <th style="width: 20%">Alma Mater</th>
                         <th style="width: 20%">About</th>
-                        <th style="width: 60%">Contact Info</th>
+                        <th style="width: 40%">Contact Info</th>
                     </tr>
                 </thead>
                 <tbody>
                    {% for item in engineers %}
                    <tr>
                        <td>{{ item.name }}</td>
+                       <td>{{ item.alma_mater }}</td>
                        <td>{{ item.about }}</td>
                        <td>{{ item.contact_info }}</td>
                    </tr>
