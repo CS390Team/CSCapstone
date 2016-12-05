@@ -9,16 +9,14 @@ from .models import MyUser
 
 def getGroups(request):
     if request.user.is_authenticated():
+        users_list = models.MyUser.objects.all()
+        for user in users_list:
+            print(user.email)
 
         email = request.user.email
-        print(email)
         is_student = request.user.is_student
         is_professor = request.user.is_professor
         is_engineer = request.user.is_engineer
-
-        print("is_student = %d" % is_student)
-        print("is_professor = %d" % is_professor)
-        print("is_engineer = %d" % is_engineer)
 
         groups_list = models.Group.objects.all()
         context = {
@@ -98,7 +96,13 @@ def unjoinGroup(request):
 
 def getAddMembersForm(request):
     if request.user.is_authenticated():
-        return render(request, 'addmembers.html')
+        in_name = request.GET.get('name', 'None')
+        in_group = models.Group.objects.get(name__exact=in_name)
+        context = {
+            'group' : in_group,
+            'userIsMember': True,
+        }
+        return render(request, 'addmemberform.html', context)
     return render(request, 'autherror.html')
 
 def addMembers(request):
@@ -106,16 +110,45 @@ def addMembers(request):
         if request.method == 'POST':
             form = forms.AddMembersForm(request.POST)
             if form.is_valid():
-                if not models.Group.objects.filter(name__exact=form.cleaned_data['email']).exists():
-                    return render(request, 'addmembers.html', {'error' : 'Error: The email is not found!'})
-                in_email = request.GET.get('email', 'None')
-                in_user = models.MyUser.objects.get(email=in_email)
+                # find user
+                # warn if user is not found
+                in_user_email = form.cleaned_data['email']
+                print(in_user_email)
+                if not models.MyUser.objects.filter(email__exact=in_user_email).exists():
+                    return render(request, 'addmemberform.html', {'error' : 'Error: The user does not exist'})
+                
+                in_user = models.MyUser.objects.get(email__exact=in_user_email)
+                print("user found")
+                
+                # find group
+                in_group_name = "Bridges International" # TODO: get group name
+                print(in_group_name)
+                in_group = models.Group.objects.get(name__exact=in_group_name)
+
+                # print out all members of the group
+                print("All members:")
+                for member in in_group.members.all():
+                    print(member.email)
+                
+                # check if user already in the group
+                if in_group.members.filter(email__exact=in_user_email):
+                    return render(request, 'addmemberform.html', {'error' : 'Error: The user is already a member'})
+                
+                # check if user is a student
+                if not in_user.is_student:
+                    return render(request, 'addmemberform.html', {'error' : 'Error: The user is not a student'})
+                
+                # add user to group
                 in_group.members.add(in_user)
                 in_group.save();
+                in_user.group_set.add(in_group)
+                in_user.save()
+                
                 context = {
-                    'email' : form.cleaned_data['email'],
+                    'group' : in_group,
+                    'userIsMember': True,
                 }
-                return render(request, 'groupformsuccess.html', context)
+            return render(request, 'group.html', context)
         else:
             form = forms.GroupForm()
         return render(request, 'groupform.html')
