@@ -22,7 +22,10 @@ class MyUserManager(BaseUserManager):
         #If first_name is not present, set it as email's username by default
         if first_name is None or first_name == "" or first_name == '':                                
             user.first_name = email[:email.find("@")]            
-        
+        else:
+            user.first_name = first_name
+            user.last_name = last_name
+
         user.save(using=self._db)
         return user
 

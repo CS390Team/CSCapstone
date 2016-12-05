@@ -11,7 +11,7 @@ def getGroups(request):
     if request.user.is_authenticated():
         users_list = models.MyUser.objects.all()
         for user in users_list:
-            print(user.email)
+            print("%s %s") %(user.email, user.get_full_name())
 
         email = request.user.email
         is_student = request.user.is_student
