@@ -5,9 +5,21 @@ from django.shortcuts import render
 
 from . import models
 from . import forms
+from .models import MyUser
 
 def getGroups(request):
     if request.user.is_authenticated():
+
+        email = request.user.email
+        print(email)
+        is_student = request.user.is_student
+        is_professor = request.user.is_professor
+        is_engineer = request.user.is_engineer
+
+        print("is_student = %d" % is_student)
+        print("is_professor = %d" % is_professor)
+        print("is_engineer = %d" % is_engineer)
+
         groups_list = models.Group.objects.all()
         context = {
             'groups' : groups_list,
