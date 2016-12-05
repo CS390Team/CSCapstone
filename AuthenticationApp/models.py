@@ -77,22 +77,22 @@ class MyUser(AbstractBaseUser):
         null=True,
         blank=True,
         )
-    contact_info = models.CharField(
-        max_length=120,
-        null=True,
-        blank=True,
-        )
-    description = models.CharField(
-        max_length=120,
-        null=True,
-        blank=True,
-        )
+    # contact_info = models.CharField(
+    #     max_length=120,
+    #     null=True,
+    #     blank=True,
+    #     )
+    # description = models.CharField(
+    #     max_length=120,
+    #     null=True,
+    #     blank=True,
+    #     )
 
     is_active = models.BooleanField(default=True,)
     is_admin = models.BooleanField(default=False,)
 
     # #New fields added
-    is_student = models.BooleanField(default=False,)
+    is_student = models.BooleanField(default=True,)
     is_professor = models.BooleanField(default=False,)
     is_engineer = models.BooleanField(default=False,)   
 
@@ -119,10 +119,6 @@ class MyUser(AbstractBaseUser):
     def has_module_perms(self, app_label):        
         return True
 
-    def has_module_perms(self, app_label):        
-        return True
-
-
     @property
     def is_staff(self):
         return self.is_admin
@@ -139,9 +135,9 @@ class Student(models.Model):
         MyUser,
         on_delete=models.CASCADE,
         primary_key=True)
-    courses = models.ForeignKey('UniversitiesApp.Course',default=None,null=True)
-    groups = models.ForeignKey('GroupsApp.Group',default=None,null=True)
-    university = models.OneToOneField('UniversitiesApp.University',default=None,null=True)
+    groups = models.ManyToManyField('GroupsApp.Group',default=None,null=True)
+    university = models.ForeignKey('UniversitiesApp.University',default=None,null=True)
+
     def get_full_name(self):        
         return "%s %s" %(self.user.first_name, self.user.last_name)
 
@@ -160,7 +156,6 @@ class Student(models.Model):
     def has_module_perms(self, app_label):        
         return True
 
-
     @property
     def is_staff(self):
         return False
@@ -171,7 +166,7 @@ class Professor(models.Model):
         on_delete=models.CASCADE,
         primary_key=True)
     courses = models.ForeignKey('UniversitiesApp.Course',default=None,null=True)
-    university = models.OneToOneField('UniversitiesApp.University',default=None,null=True)
+    university = models.ForeignKey('UniversitiesApp.University',default=None,null=True)
     def get_full_name(self):        
         return "%s %s" %(self.user.first_name, self.user.last_name)
 
@@ -200,7 +195,7 @@ class Engineer(models.Model):
         on_delete=models.CASCADE,
         primary_key=True)
     companies = models.ForeignKey('CompaniesApp.Company',default=None,null=True)
-    projects = models.ForeignKey('ProjectsApp.Project',default=None,null=True)
+    # projects = models.ForeignKey('ProjectsApp.Project',default=None,null=True)
     def get_full_name(self):        
         return "%s %s" %(self.user.first_name, self.user.last_name)
 

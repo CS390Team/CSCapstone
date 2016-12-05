@@ -95,4 +95,30 @@ def unjoinGroup(request):
         }
         return render(request, 'group.html', context)
     return render(request, 'autherror.html')
+
+def getAddMembersForm(request):
+    if request.user.is_authenticated():
+        return render(request, 'addmembers.html')
+    return render(request, 'autherror.html')
+
+def addMembers(request):
+    if request.user.is_authenticated():
+        if request.method == 'POST':
+            form = forms.AddMembersForm(request.POST)
+            if form.is_valid():
+                if not models.Group.objects.filter(name__exact=form.cleaned_data['email']).exists():
+                    return render(request, 'addmembers.html', {'error' : 'Error: The email is not found!'})
+                in_email = request.GET.get('email', 'None')
+                in_user = models.MyUser.objects.get(email=in_email)
+                in_group.members.add(in_user)
+                in_group.save();
+                context = {
+                    'email' : form.cleaned_data['email'],
+                }
+                return render(request, 'groupformsuccess.html', context)
+        else:
+            form = forms.GroupForm()
+        return render(request, 'groupform.html')
+    # render error page if user is not logged in
+    return render(request, 'autherror.html')
     
