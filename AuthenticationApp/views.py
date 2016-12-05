@@ -11,7 +11,7 @@ from django.contrib import messages
 
 
 from .forms import LoginForm, RegisterForm, UpdateForm
-from .models import MyUser, Student
+from .models import MyUser, Student, Professor, Engineer
 
 # Auth Views
 
@@ -52,11 +52,25 @@ def auth_register(request):
 	if form.is_valid():
 		new_user = MyUser.objects.create_user(email=form.cleaned_data['email'], 
 			password=form.cleaned_data["password2"], 
-			first_name=form.cleaned_data['firstname'], last_name=form.cleaned_data['lastname'])
+			first_name=form.cleaned_data['firstname'], 
+			last_name=form.cleaned_data['lastname']
+		)
 		new_user.save()	
-		#Also registering students		
-		new_student = Student(user = new_user)
-		new_student.save()
+
+		#Also registering students
+		if (form.cleaned_data['student']):
+			new_user.is_student = True
+			new_student = Student(user = new_user)
+			new_student.save()
+		elif (form.cleaned_data['professor']):
+			new_user.is_professor = True
+			new_professor = Professor(user = new_user)
+			new_professor.save()
+		elif (form.cleaned_data['engineer']):
+			new_user.is_engineer = True
+			new_engineer = Engineer(user = new_user)
+			new_engineer.save()		
+
 		login(request, new_user);	
 		messages.success(request, 'Success! Your account was created.')
 		return render(request, 'index.html')

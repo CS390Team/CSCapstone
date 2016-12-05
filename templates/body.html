@@ -21,39 +21,43 @@
 					<li><a href="/register">Register</a></li>
 				{% else %}
 					<li><a href="/update">Update Profile</a></li>
-					<li role="presentation" class="dropdown">
-						<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-						  Groups/Organizations <span class="caret"></span>
-						</a>
-						<ul class="dropdown-menu">
-							<li><a href="/company/all">Companies</a></li>
-							<li><a href="/university/all">Universities</a></li>
-							<li><a href="/group/all">Groups</a></li>
-						</ul>
-					</li>
-					<li role="presentation" class="dropdown">
-						<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-						  Create new Group/Organization <span class="caret"></span>
-						</a>
-						<ul class="dropdown-menu">
-							<li><a href="/company/form">Create Company</a></li>
-							<li><a href="/university/form">Create University</a></li>
-							{% if user.is_student %}
+					<li><a href="/project/all">View Projects</a></li>
+					{% if user.is_student == True %}
+						<li role="presentation" class="dropdown">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+						  	Groups <span class="caret"></span>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a href="/group/all">View Groups</a></li>
 								<li><a href="/group/form">Create Group</a></li>
-							{% endif %}
-						</ul>
-					</li>
-					<li role="presentation" class="dropdown">
-						<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-						  Others <span class="caret"></span>
-						</a>
-						<ul class="dropdown-menu">
-							<li><a href="/comments">Comments</a></li>
-							<li><a href="/teachers">Teachers</a></li>
-							<li><a href="/engineers">Engineers</a></li>
-						</ul>
-					</li>
-					<li><a href="/logout">Logout</a></li>
+							</ul>
+						</li>
+					{% elif user.is_professor == True %}
+						<li><a href="/">View Students</a></li>
+						<li role="presentation" class="dropdown">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+						  	Classes <span class="caret"></span>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a href="university/course">View Classes</a></li>
+								<li><a href="university/course/add">Create Class</a></li>
+							</ul>
+						</li>
+					{% elif user.is_engineer == True %}
+						<li role="presentation" class="dropdown">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+						  	Companies <span class="caret"></span>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a href="/company/all">Manege Companies</a></li>
+								<li><a href="/company/form">Create Company</a></li>
+							</ul>
+						</li>
+					{% endif %}
+						<li><a href="/logout">Logout</a></li>
+					{% if user.is_admin == True %}
+						<li>Admin</li>
+					{% endif %}
 				{% endif %}
 				</ul>
 			</div>
