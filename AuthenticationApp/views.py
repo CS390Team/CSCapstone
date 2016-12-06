@@ -9,8 +9,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.contrib import messages
 
-
 from .forms import LoginForm, RegisterForm, UpdateForm
+from . import models
 from .models import MyUser, Student, Professor, Engineer
 
 # Auth Views
@@ -53,28 +53,27 @@ def auth_register(request):
 		email=form.cleaned_data['email']
 		first_name=form.cleaned_data['firstname']
 		last_name=form.cleaned_data['lastname']
-		is_student = form.cleaned_data['student']
-		is_professor = form.cleaned_data['professor']
-		is_engineer = form.cleaned_data['engineer']
+
+		identity = form.cleaned_data['identity']
 
 		new_user = MyUser.objects.create_user(email=form.cleaned_data['email'], 
 			password=form.cleaned_data["password2"], 
 			first_name=form.cleaned_data['firstname'], 
 			last_name=form.cleaned_data['lastname'],
-			is_student=is_student,
-			is_professor=is_professor,
-			is_engineer=is_engineer
+			is_student=(identity=="student"),
+			is_professor=(identity=="professor"),
+			is_engineer=(identity=="engineer")
 		)
 		new_user.save()	
 
 		#Also registering students
-		if (is_student):
+		if (identity == "student"):
 			new_student = Student(user = new_user)
 			new_student.save()
-		elif (is_professor):
+		elif (identity == "professor"):
 			new_professor = Professor(user = new_user)
 			new_professor.save()
-		elif (is_engineer):
+		elif (identity == "engineer"):
 			new_engineer = Engineer(user = new_user)
 			new_engineer.save()		
 
@@ -94,6 +93,21 @@ def auth_register(request):
 def update_profile(request):
 	form = UpdateForm(request.POST or None, instance=request.user)
 	if form.is_valid():
+		identity = form.cleaned_data['identity']
+		if (identity == "student"):
+			request.user.is_student = True
+			request.user.is_professor = False
+			request.user.is_engineer = False
+		elif (identity == "professor"):
+			request.user.is_student = False
+			request.user.is_professor = True
+			request.user.is_engineer = False
+		elif (identity == "engineer"):
+			request.user.is_student = False
+			request.user.is_professor = False
+			request.user.is_engineer = True
+
+		request.user.save()
 		form.save()
 		messages.success(request, 'Success, your profile was saved!')
 
@@ -104,3 +118,14 @@ def update_profile(request):
 		"links" : ["logout"],
 	}
 	return render(request, 'auth_form.html', context)
+
+def getStudents(request):
+	if request.user.is_authenticated():
+		students = models.Student.objects.all()
+		for item in students:
+			print(item.user.email)
+		context = {
+			'students' : students,
+		}
+		return render(request, 'students.html', context)
+	return render(request, 'autherror.html')

@@ -18,6 +18,7 @@ urlpatterns = [
 	url(r'^university/course/remove$', views.removeCourse, name="RemoveCourse"),
 	url(r'^university/course/join$', views.joinCourse, name="JoinCourse"),
 	url(r'^university/course/unjoin$', views.unjoinCourse, name="UnjoinCourse"),
+	url(r'^university/courses$', views.getCourses, name="Courses"),
 	url(r'^university/course$', views.getCourse, name="Course"),
     url(r'^university$', views.getUniversity, name='University'),
 ]

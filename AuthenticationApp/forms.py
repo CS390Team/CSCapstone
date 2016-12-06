@@ -21,9 +21,8 @@ class RegisterForm(forms.Form):
     firstname = forms.CharField(label="First name", widget=forms.TextInput, required=True)
     lastname = forms.CharField(label="Last name", widget=forms.TextInput, required=True)               
 
-    student = forms.BooleanField(label="Is student?", required=False)       
-    professor = forms.BooleanField(label="Is professor?", required=False)     
-    engineer = forms.BooleanField(label="Is engineer?", required=False)
+    selections = ['student', 'professor', 'engineer']
+    identity = forms.ChoiceField(choices=[(x, x) for x in selections], required = True)
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -51,9 +50,21 @@ class UpdateForm(forms.ModelForm):
     """
     password = ReadOnlyPasswordHashField()
 
+    default_index = 0
+    # if user.is_student:
+    #     default_index = 0
+    # elif user.is_professor:
+    #     default_index = 1
+    # else:
+    #     default_index = 2
+    selections = ['student', 'professor', 'engineer']
+    identity = forms.ChoiceField(widget = forms.Select(), choices=[(x, x) for x in selections])
+
+    # identity = forms.ChoiceField(widget = forms.Select(), choices=[(x, x) for x in selections], initial=selections[default_index])
+
     class Meta:
         model = MyUser        
-        fields = ('email', 'password', 'first_name', 'last_name', 'is_student', 'is_professor', 'is_engineer')
+        fields = ('email', 'password', 'first_name', 'last_name')
 
     def clean_password(self):  
         return self.initial["password"]        
@@ -79,21 +90,18 @@ class UpdateForm(forms.ModelForm):
             email = self.cleaned_data.get("email")                               
             return email[:email.find("@")]      
         return first_name
-    
-    def clean_is_student(self):
-        is_student = self.cleaned_data.get("is_student")
-        print(is_student)
-        return is_student
 
-    def clean_is_professor(self):
-        is_professor = self.cleaned_data.get("is_professor")
-        print(is_professor)
-        return is_professor
+    # def clean_is_student(self):
+    #     is_student = self.cleaned_data.get("is_student")
+    #     return is_student
 
-    def clean_is_engineer(self):
-        is_engineer = self.cleaned_data.get("is_engineer")
-        print(is_engineer)
-        return is_engineer
+    # def clean_is_professor(self):
+    #     is_professor = self.cleaned_data.get("is_professor")
+    #     return is_professor
+
+    # def clean_is_engineer(self):
+    #     is_engineer = self.cleaned_data.get("is_engineer")
+    #     return is_engineer
   
 """Admin Forms"""
 

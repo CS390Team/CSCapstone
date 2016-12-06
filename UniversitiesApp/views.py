@@ -106,6 +106,15 @@ def getCourse(request):
 		return render(request, 'course.html', context)
 	return render(request, 'autherror.html')
 
+def getCourses(request):
+	if request.user.is_authenticated():
+		courses = models.Course.objects.all()
+		context = {
+			'courses' : courses,
+		}
+		return render(request, 'courses.html', context)
+	return render(request, 'autherror.html')
+
 def courseForm(request):
 	if request.user.is_authenticated():
 		in_university_name = request.GET.get('name', 'None')
