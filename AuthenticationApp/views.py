@@ -8,6 +8,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.contrib import messages
+from UniversitiesApp.models import University
 
 from .forms import LoginForm, RegisterForm, UpdateForm
 from . import models
@@ -47,7 +48,6 @@ def auth_logout(request):
 def auth_register(request):
 	# if request.user.is_authenticated():
 		# return HttpResponseRedirect("/")
-	
 	form = RegisterForm(request.POST or None)
 	if form.is_valid():
 		email=form.cleaned_data['email']
@@ -60,24 +60,27 @@ def auth_register(request):
 			password=form.cleaned_data["password2"], 
 			first_name=form.cleaned_data['firstname'], 
 			last_name=form.cleaned_data['lastname'],
-			is_student=(identity=="student"),
-			is_professor=(identity=="professor"),
-			is_engineer=(identity=="engineer")
-		)
-		new_user.save()	
-
+            is_student = form.cleaned_data['student'],
+            is_professor = form.cleaned_data['professor'],
+            is_engineer = form.cleaned_data['engineer'],
+            university = form.cleaned_data['university'])
+                       
+		new_user.save()
+                u_list = University.objects.all()
+                curUniv = u_list[int(new_user.univ)-2]
 		#Also registering students
-		if (identity == "student"):
-			new_student = Student(user = new_user)
-			new_student.save()
-		elif (identity == "professor"):
-			new_professor = Professor(user = new_user)
-			new_professor.save()
-		elif (identity == "engineer"):
-			new_engineer = Engineer(user = new_user)
-			new_engineer.save()		
+                if new_user.is_student == True:	
+		    new_student = Student(user = new_user,university = curUniv)
+		    new_student.save()
+                elif new_user.is_professor == True:
+                    new_professor = Professor(user = new_user,university = curUniv)
+                    new_professor.save()
+                elif new_user.is_engineer == True:
+                    new_engineer = Engineer(user = new_user,university = curUniv)
+                    new_engineer.save()
+                #print new_student.university
+		login(request, new_user);
 
-		login(request, new_user);	
 		messages.success(request, 'Success! Your account was created.')
 		return render(request, 'index.html')
 
