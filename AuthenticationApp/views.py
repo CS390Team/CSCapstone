@@ -50,35 +50,52 @@ def auth_register(request):
 		# return HttpResponseRedirect("/")
 	form = RegisterForm(request.POST or None)
 	if form.is_valid():
+
 		email=form.cleaned_data['email']
 		first_name=form.cleaned_data['firstname']
 		last_name=form.cleaned_data['lastname']
 
-		new_user = MyUser.objects.create_user(email=form.cleaned_data['email'], 
-			password=form.cleaned_data["password2"], 
-			first_name=form.cleaned_data['firstname'], 
-			last_name=form.cleaned_data['lastname'],
-            is_student = form.cleaned_data['student'],
-            is_professor = form.cleaned_data['professor'],
-            is_engineer = form.cleaned_data['engineer'],
-            university = form.cleaned_data['university'])
-                       
-		new_user.save()
-                u_list = University.objects.all()
-                curUniv = u_list[int(new_user.univ)-2]
-		#Also registering students
-                if new_user.is_student == True:	
-		    new_student = Student(user = new_user,university = curUniv)
-		    new_student.save()
-                elif new_user.is_professor == True:
-                    new_professor = Professor(user = new_user,university = curUniv)
-                    new_professor.save()
-                elif new_user.is_engineer == True:
-                    new_engineer = Engineer(user = new_user,university = curUniv)
-                    new_engineer.save()
-                #print new_student.university
-		login(request, new_user);
+		role = form.cleaned_data['role']
 
+		if role == 'student':
+			new_student = MyUser.objects.create_student(
+				email=form.cleaned_data['email'],
+				password=form.cleaned_data["password2"],
+				first_name=form.cleaned_data['firstname'], 
+				last_name=form.cleaned_data['lastname'],
+				)
+
+			new_student.save()
+
+			login(request, new_student.user);
+
+		elif role == 'professor':
+			new_professor = MyUser.objects.create_professor(
+				email=form.cleaned_data['email'],
+				password=form.cleaned_data["password2"],
+				first_name=form.cleaned_data['firstname'], 
+				last_name=form.cleaned_data['lastname'],
+				)
+
+			new_professor.save()
+
+			login(request, new_professor.user);
+
+		else:
+			new_engineer = MyUser.objects.create_engineer(
+				email=form.cleaned_data['email'],
+				password=form.cleaned_data["password2"],
+				first_name=form.cleaned_data['firstname'], 
+				last_name=form.cleaned_data['lastname'],
+				)
+
+			new_engineer.save()
+
+			login(request, new_engineer.user);
+		
+        # u_list = University.objects.all()
+        # curUniv = u_list[int(new_user.univ)-2]
+		
 		messages.success(request, 'Success! Your account was created.')
 		return render(request, 'index.html')
 
@@ -94,22 +111,14 @@ def auth_register(request):
 def update_profile(request):
 	form = UpdateForm(request.POST or None, instance=request.user)
 	if form.is_valid():
-		is_student = form.cleaned_data['is_student']
-		is_professor = form.cleaned_data['is_professor']
-		is_engineer = form.cleaned_data['is_engineer']
+		university_name = form.cleaned_data['university']
+		university = University.objects.get(name=university_name)
 
-		if (is_student):
-			request.user.is_student = True
-			request.user.is_professor = False
-			request.user.is_engineer = False
-		elif (is_professor):
-			request.user.is_student = False
-			request.user.is_professor = True
-			request.user.is_engineer = False
-		elif (is_engineer):
-			request.user.is_student = False
-			request.user.is_professor = False
-			request.user.is_engineer = True
+		print(university.name)
+
+		request.user.student.university = university
+
+		# TODO: set the university to student
 
 		request.user.save()
 		form.save()

@@ -6,6 +6,7 @@ from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django import forms
 from .models import MyUser
 from UniversitiesApp.models import University
+
 class LoginForm(forms.Form):
     email = forms.CharField(label='Email')
     password = forms.CharField(label='Password', widget=forms.PasswordInput)
@@ -21,18 +22,12 @@ class RegisterForm(forms.Form):
     firstname = forms.CharField(label="First name", widget=forms.TextInput, required=True)
     lastname = forms.CharField(label="Last name", widget=forms.TextInput, required=True)               
 
-    student = forms.BooleanField(label="Is student?", required=False)       
-    professor = forms.BooleanField(label="Is professor?", required=False)     
-    engineer = forms.BooleanField(label="Is engineer?", required=False)
-    uobjectlist = University.objects.all()
-    u_list = [(1,"Select your University")]
-    i = 2
-    for item in uobjectlist:
-        current = (i,item)
-        u_list.append(current)
-        i = i+1
-    u_list = tuple(u_list)
-    university = forms.TypedChoiceField(choices = u_list,widget = forms.Select,label = "Your University")
+    selections = ['student', 'professor', 'engineer']
+    role = forms.ChoiceField(choices=[(x, x) for x in selections], required = True)
+
+    # student = forms.BooleanField(label="Is student?", initial=True, required=False)       
+    # professor = forms.BooleanField(label="Is professor?", required=False)     
+    # engineer = forms.BooleanField(label="Is engineer?", required=False)
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -65,9 +60,19 @@ class UpdateForm(forms.ModelForm):
 
     # identity = forms.ChoiceField(widget = forms.Select(), choices=[(x, x) for x in selections], initial=selections[default_index])
 
+    print("is student")
+    uobjectlist = University.objects.all()
+    u_list = [(None,"Select your University")]
+    for item in uobjectlist:
+        current = (item,item)
+        u_list.append(current)
+    u_list = tuple(u_list)
+    university = forms.TypedChoiceField(choices = u_list,widget = forms.Select,label = "University")
+    
+
     class Meta:
         model = MyUser        
-        fields = ('email', 'password', 'first_name', 'last_name', "is_student", "is_professor", "is_engineer")
+        fields = ('email', 'password', 'first_name', 'last_name')
 
     def clean_password(self):  
         return self.initial["password"]        
