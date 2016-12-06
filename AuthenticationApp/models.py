@@ -52,7 +52,6 @@ class MyUserManager(BaseUserManager):
         password=None,
         first_name=None,
         last_name=None,
-        university=None
         ):
 
         user = self.create_user(email=email, 
@@ -62,14 +61,7 @@ class MyUserManager(BaseUserManager):
             is_student=True)
 
         student = Student()
-        student.user = user
-        # student.university = university
-
-        # if university != 'Select your University':
-        #     univ = University.objects.get(name=university)
-        #     student.university = univ
-        #     university = models.University.objects.get(name=university)
-        #     student.university = university
+        student.user = user        
 
         student.save(using=self._db)
 
@@ -80,7 +72,6 @@ class MyUserManager(BaseUserManager):
         password=None,
         first_name=None,
         last_name=None,
-        university=None
         ):
 
         user = self.create_user(email=email, 
@@ -89,10 +80,8 @@ class MyUserManager(BaseUserManager):
             last_name=last_name,
             is_professor=True)
 
-        professor = Professor(user=user)
-
-        # if university != 'Select your University':
-            # professor.university
+        professor = Professor()
+        professor.user = user
 
         professor.save(using=self._db)
 
@@ -103,7 +92,6 @@ class MyUserManager(BaseUserManager):
         password=None,
         first_name=None,
         last_name=None,
-        company=None
         ):
 
         user = self.create_user(email=email, 
@@ -114,7 +102,6 @@ class MyUserManager(BaseUserManager):
 
         engineer = Engineer()
         engineer.user = user
-        engineer.company = company
 
         engineer.save(using=self._db)
 
