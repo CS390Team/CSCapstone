@@ -33,15 +33,15 @@
 							</ul>
 						</li>
 					{% elif user.is_professor == True %}
-						<li><a href="/project/all">View Projects</a></li>
-						<li><a href="/">View Students</a></li>
+						<li><a href="/students">View Students</a></li>
+
 						<li role="presentation" class="dropdown">
 							<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
 						  	Classes <span class="caret"></span>
 							</a>
 							<ul class="dropdown-menu">
-								<li><a href="university/course">View Classes</a></li>
-								<li><a href="university/course/add">Create Class</a></li>
+								<li><a href="/university/courses">View Classes</a></li>
+								<li><a href="/university/course/add">Create Class</a></li>
 							</ul>
 						</li>
 					{% elif user.is_engineer == True %}

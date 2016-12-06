@@ -8,9 +8,10 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.contrib import messages
-
+from UniversitiesApp.models import University
 
 from .forms import LoginForm, RegisterForm, UpdateForm
+from . import models
 from .models import MyUser, Student, Professor, Engineer
 
 # Auth Views
@@ -47,31 +48,37 @@ def auth_logout(request):
 def auth_register(request):
 	# if request.user.is_authenticated():
 		# return HttpResponseRedirect("/")
-	
 	form = RegisterForm(request.POST or None)
 	if form.is_valid():
+		email=form.cleaned_data['email']
+		first_name=form.cleaned_data['firstname']
+		last_name=form.cleaned_data['lastname']
+
 		new_user = MyUser.objects.create_user(email=form.cleaned_data['email'], 
 			password=form.cleaned_data["password2"], 
 			first_name=form.cleaned_data['firstname'], 
-			last_name=form.cleaned_data['lastname']
-		)
-		new_user.save()	
-
+			last_name=form.cleaned_data['lastname'],
+            is_student = form.cleaned_data['student'],
+            is_professor = form.cleaned_data['professor'],
+            is_engineer = form.cleaned_data['engineer'],
+            university = form.cleaned_data['university'])
+                       
+		new_user.save()
+                u_list = University.objects.all()
+                curUniv = u_list[int(new_user.univ)-2]
 		#Also registering students
-		if (form.cleaned_data['student']):
-			new_user.is_student = True
-			new_student = Student(user = new_user)
-			new_student.save()
-		elif (form.cleaned_data['professor']):
-			new_user.is_professor = True
-			new_professor = Professor(user = new_user)
-			new_professor.save()
-		elif (form.cleaned_data['engineer']):
-			new_user.is_engineer = True
-			new_engineer = Engineer(user = new_user)
-			new_engineer.save()		
+                if new_user.is_student == True:	
+		    new_student = Student(user = new_user,university = curUniv)
+		    new_student.save()
+                elif new_user.is_professor == True:
+                    new_professor = Professor(user = new_user,university = curUniv)
+                    new_professor.save()
+                elif new_user.is_engineer == True:
+                    new_engineer = Engineer(user = new_user,university = curUniv)
+                    new_engineer.save()
+                #print new_student.university
+		login(request, new_user);
 
-		login(request, new_user);	
 		messages.success(request, 'Success! Your account was created.')
 		return render(request, 'index.html')
 
@@ -87,6 +94,24 @@ def auth_register(request):
 def update_profile(request):
 	form = UpdateForm(request.POST or None, instance=request.user)
 	if form.is_valid():
+		is_student = form.cleaned_data['is_student']
+		is_professor = form.cleaned_data['is_professor']
+		is_engineer = form.cleaned_data['is_engineer']
+
+		if (is_student):
+			request.user.is_student = True
+			request.user.is_professor = False
+			request.user.is_engineer = False
+		elif (is_professor):
+			request.user.is_student = False
+			request.user.is_professor = True
+			request.user.is_engineer = False
+		elif (is_engineer):
+			request.user.is_student = False
+			request.user.is_professor = False
+			request.user.is_engineer = True
+
+		request.user.save()
 		form.save()
 		messages.success(request, 'Success, your profile was saved!')
 
@@ -97,3 +122,14 @@ def update_profile(request):
 		"links" : ["logout"],
 	}
 	return render(request, 'auth_form.html', context)
+
+def getStudents(request):
+	if request.user.is_authenticated():
+		students = models.Student.objects.all()
+		for item in students:
+			print(item.user.email)
+		context = {
+			'students' : students,
+		}
+		return render(request, 'students.html', context)
+	return render(request, 'autherror.html')

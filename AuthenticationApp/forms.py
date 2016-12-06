@@ -5,7 +5,7 @@ Created by Naman Patwari on 10/4/2016.
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django import forms
 from .models import MyUser
-
+from UniversitiesApp.models import University
 class LoginForm(forms.Form):
     email = forms.CharField(label='Email')
     password = forms.CharField(label='Password', widget=forms.PasswordInput)
@@ -24,6 +24,15 @@ class RegisterForm(forms.Form):
     student = forms.BooleanField(label="Is student?", required=False)       
     professor = forms.BooleanField(label="Is professor?", required=False)     
     engineer = forms.BooleanField(label="Is engineer?", required=False)
+    uobjectlist = University.objects.all()
+    u_list = [(1,"Select your University")]
+    i = 2
+    for item in uobjectlist:
+        current = (i,item)
+        u_list.append(current)
+        i = i+1
+    u_list = tuple(u_list)
+    university = forms.TypedChoiceField(choices = u_list,widget = forms.Select,label = "Your University")
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -50,10 +59,15 @@ class UpdateForm(forms.ModelForm):
     password hash display field.
     """
     password = ReadOnlyPasswordHashField()
+    
+    # selections = ['student', 'professor', 'engineer']
+    # identity = forms.ChoiceField(widget = forms.Select(), choices=[(x, x) for x in selections])
+
+    # identity = forms.ChoiceField(widget = forms.Select(), choices=[(x, x) for x in selections], initial=selections[default_index])
 
     class Meta:
         model = MyUser        
-        fields = ('email', 'password', 'first_name', 'last_name', 'is_student', 'is_professor', 'is_engineer')
+        fields = ('email', 'password', 'first_name', 'last_name', "is_student", "is_professor", "is_engineer")
 
     def clean_password(self):  
         return self.initial["password"]        
@@ -79,18 +93,6 @@ class UpdateForm(forms.ModelForm):
             email = self.cleaned_data.get("email")                               
             return email[:email.find("@")]      
         return first_name
-    
-    def clean_is_student(self):
-        is_student = self.cleaned_data.get("is_student")
-        return is_student
-
-    def clean_is_professor(self):
-        is_professor = self.cleaned_data.get("is_professor")
-        return is_professor
-
-    def clean_is_engineer(self):
-        is_engineer = self.cleaned_data.get("is_engineer")
-        return is_engineer
   
 """Admin Forms"""
 
