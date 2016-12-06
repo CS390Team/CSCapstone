@@ -82,17 +82,14 @@ class UpdateForm(forms.ModelForm):
     
     def clean_is_student(self):
         is_student = self.cleaned_data.get("is_student")
-        print(is_student)
         return is_student
 
     def clean_is_professor(self):
         is_professor = self.cleaned_data.get("is_professor")
-        print(is_professor)
         return is_professor
 
     def clean_is_engineer(self):
         is_engineer = self.cleaned_data.get("is_engineer")
-        print(is_engineer)
         return is_engineer
   
 """Admin Forms"""

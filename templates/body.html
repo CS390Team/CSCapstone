@@ -21,8 +21,8 @@
 					<li><a href="/register">Register</a></li>
 				{% else %}
 					<li><a href="/update">Update Profile</a></li>
-					<li><a href="/project/all">View Projects</a></li>
 					{% if user.is_student == True %}
+						<li><a href="/project/all">View Projects</a></li>
 						<li role="presentation" class="dropdown">
 							<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
 						  	Groups <span class="caret"></span>
@@ -33,6 +33,7 @@
 							</ul>
 						</li>
 					{% elif user.is_professor == True %}
+						<li><a href="/project/all">View Projects</a></li>
 						<li><a href="/">View Students</a></li>
 						<li role="presentation" class="dropdown">
 							<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
@@ -44,6 +45,16 @@
 							</ul>
 						</li>
 					{% elif user.is_engineer == True %}
+						<li role="presentation" class="dropdown">
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+						  	Projects <span class="caret"></span>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a href="/project/all">View All Projects</a></li>
+								<li><a href="/project">View My Projects</a></li>
+								<li><a href="/project/form">Create Project</a></li>
+							</ul>
+						</li>
 						<li role="presentation" class="dropdown">
 							<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
 						  	Companies <span class="caret"></span>
