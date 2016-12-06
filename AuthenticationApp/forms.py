@@ -60,13 +60,13 @@ class UpdateForm(forms.ModelForm):
 
     # identity = forms.ChoiceField(widget = forms.Select(), choices=[(x, x) for x in selections], initial=selections[default_index])
 
-    uobjectlist = University.objects.all()
-    u_list = [(None,"Select your University")]
-    for item in uobjectlist:
-        current = (item,item)
-        u_list.append(current)
-    u_list = tuple(u_list)
-    university = forms.TypedChoiceField(choices = u_list,widget = forms.Select,label = "University")
+    # uobjectlist = University.objects.all()
+    # u_list = [(None,"Select your University")]
+    # for item in uobjectlist:
+    #     current = (item,item)
+    #     u_list.append(current)
+    # u_list = tuple(u_list)
+    # university = forms.TypedChoiceField(choices = u_list,widget = forms.Select,label = "University")
     
 
     class Meta:
