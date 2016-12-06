@@ -22,6 +22,7 @@
 				{% else %}
 					<li><a href="/update">Update Profile</a></li>
 					{% if user.is_student == True %}
+						<li><a href="/university/all">View Universities</a></li>
 						<li><a href="/project/all">View Projects</a></li>
 						<li role="presentation" class="dropdown">
 							<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
@@ -34,7 +35,7 @@
 						</li>
 					{% elif user.is_professor == True %}
 						<li><a href="/students">View Students</a></li>
-
+						<li><a href="/university/all">View Universities</a></li>
 						<li role="presentation" class="dropdown">
 							<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
 						  	Classes <span class="caret"></span>

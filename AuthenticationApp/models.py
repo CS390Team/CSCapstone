@@ -196,8 +196,8 @@ class Student(models.Model):
         primary_key=True)
 
     university = models.ForeignKey('UniversitiesApp.University',default=None,null=True)
-    groups = models.ManyToManyField('GroupsApp.Group',default=None)
-    courses = models.ManyToManyField('UniversitiesApp.Course',default=None)
+    # groups = models.ManyToManyField('GroupsApp.Group',default=None)
+    # courses = models.ManyToManyField('UniversitiesApp.Course',default=None)
 
     def get_full_name(self):        
         return "%s %s" %(self.user.first_name, self.user.last_name)

@@ -4,7 +4,7 @@ UniversitiesApp Models
 Created by Jacob Dunbar on 11/5/2016.
 """
 from django.db import models
-from AuthenticationApp.models import MyUser
+from AuthenticationApp.models import MyUser, Student, Professor
 
 # Create your models here.
 class University(models.Model):
@@ -22,8 +22,8 @@ class Course(models.Model):
 	name = models.CharField(max_length=50)
 	description = models.CharField(max_length=300)
 	university = models.ForeignKey(University, on_delete=models.CASCADE)
-	professor = models.ForeignKey('AuthenticationApp.Professor',default=None,null=True)
-	members = models.ManyToManyField(MyUser)
+	# professor = models.ForeignKey(Professor,default=None,null=True)
+	members = models.ManyToManyField(Student)
 
 	def __str__(self):
 		return self.name

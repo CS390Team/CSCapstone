@@ -44,8 +44,6 @@ INSTALLED_APPS = [
     'GroupsApp',
 	'UniversitiesApp',
     'CommentsApp',
-    'EngineersApp',
-    'TeachersApp',
 ]
 
 MIDDLEWARE = [
