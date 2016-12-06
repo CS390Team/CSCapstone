@@ -53,27 +53,28 @@ def auth_register(request):
 		email=form.cleaned_data['email']
 		first_name=form.cleaned_data['firstname']
 		last_name=form.cleaned_data['lastname']
-
-		print("%s %s %s") %(email, first_name, last_name)
+		is_student = form.cleaned_data['student']
+		is_professor = form.cleaned_data['professor']
+		is_engineer = form.cleaned_data['engineer']
 
 		new_user = MyUser.objects.create_user(email=form.cleaned_data['email'], 
 			password=form.cleaned_data["password2"], 
 			first_name=form.cleaned_data['firstname'], 
-			last_name=form.cleaned_data['lastname']
+			last_name=form.cleaned_data['lastname'],
+			is_student=is_student,
+			is_professor=is_professor,
+			is_engineer=is_engineer
 		)
 		new_user.save()	
 
 		#Also registering students
-		if (form.cleaned_data['student']):
-			new_user.is_student = True
+		if (is_student):
 			new_student = Student(user = new_user)
 			new_student.save()
-		elif (form.cleaned_data['professor']):
-			new_user.is_professor = True
+		elif (is_professor):
 			new_professor = Professor(user = new_user)
 			new_professor.save()
-		elif (form.cleaned_data['engineer']):
-			new_user.is_engineer = True
+		elif (is_engineer):
 			new_engineer = Engineer(user = new_user)
 			new_engineer.save()		
 
