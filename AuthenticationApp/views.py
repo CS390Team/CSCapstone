@@ -54,8 +54,6 @@ def auth_register(request):
 		first_name=form.cleaned_data['firstname']
 		last_name=form.cleaned_data['lastname']
 
-		identity = form.cleaned_data['identity']
-
 		new_user = MyUser.objects.create_user(email=form.cleaned_data['email'], 
 			password=form.cleaned_data["password2"], 
 			first_name=form.cleaned_data['firstname'], 
@@ -96,16 +94,19 @@ def auth_register(request):
 def update_profile(request):
 	form = UpdateForm(request.POST or None, instance=request.user)
 	if form.is_valid():
-		identity = form.cleaned_data['identity']
-		if (identity == "student"):
+		is_student = form.cleaned_data['is_student']
+		is_professor = form.cleaned_data['is_professor']
+		is_engineer = form.cleaned_data['is_engineer']
+
+		if (is_student):
 			request.user.is_student = True
 			request.user.is_professor = False
 			request.user.is_engineer = False
-		elif (identity == "professor"):
+		elif (is_professor):
 			request.user.is_student = False
 			request.user.is_professor = True
 			request.user.is_engineer = False
-		elif (identity == "engineer"):
+		elif (is_engineer):
 			request.user.is_student = False
 			request.user.is_professor = False
 			request.user.is_engineer = True
