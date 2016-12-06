@@ -7,6 +7,7 @@ from django.shortcuts import render
 
 from . import models
 from . import forms
+from AuthenticationApp.models import MyUser, Professor, Student
 
 def getUniversities(request):
     if request.user.is_authenticated():
@@ -118,11 +119,17 @@ def courseForm(request):
 	return render(request, 'autherror.html')
 
 def addCourse(request):
-	if request.user.is_authenticated():
+	if request.user.is_professor == True:
 		if request.method == 'POST':
 			form = forms.CourseForm(request.POST)
 			if form.is_valid():
-				in_university_name = request.GET.get('name', 'None')
+                                in_university_name = None
+                                proflist = Professor.objects.all()
+                                for prof in proflist:
+                                    if prof.user.email == request.user.email:
+                                       in_university_name = prof.university
+                                       break
+                                #print in_university_name
 				in_university = models.University.objects.get(name__exact=in_university_name)
 				if in_university.course_set.filter(tag__exact=form.cleaned_data['tag']).exists():
 					return render(request, 'courseform.html', {'error' : 'Error: That course tag already exists at this university!'})
@@ -147,8 +154,13 @@ def addCourse(request):
 	return render(request, 'autherror.html')
 		
 def removeCourse(request):
-	if request.user.is_authenticated():
-		in_university_name = request.GET.get('name', 'None')
+	if request.user.is_professor == True:
+                in_university_name = None
+                proflist = Professor.objects.all()
+                for prof in proflist:
+                    if prof.user.email == request.user.email:
+                       in_university_name = prof.university
+                       break
 		in_university = models.University.objects.get(name__exact=in_university_name)
 		in_course_tag = request.GET.get('course', 'None')
 		in_course = in_university.course_set.get(tag__exact=in_course_tag)

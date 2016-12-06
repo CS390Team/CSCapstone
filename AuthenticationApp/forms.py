@@ -5,7 +5,7 @@ Created by Naman Patwari on 10/4/2016.
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django import forms
 from .models import MyUser
-
+from UniversitiesApp.models import University
 class LoginForm(forms.Form):
     email = forms.CharField(label='Email')
     password = forms.CharField(label='Password', widget=forms.PasswordInput)
@@ -24,7 +24,15 @@ class RegisterForm(forms.Form):
     student = forms.BooleanField(label="Is student?", required=False)       
     professor = forms.BooleanField(label="Is professor?", required=False)     
     engineer = forms.BooleanField(label="Is engineer?", required=False)
-
+    uobjectlist = University.objects.all()
+    u_list = [(1,"Select your University")]
+    i = 2
+    for item in uobjectlist:
+        current = (i,item)
+        u_list.append(current)
+        i = i+1
+    u_list = tuple(u_list)
+    university = forms.TypedChoiceField(choices = u_list,widget = forms.Select,label = "Your University")
     def clean_password2(self):
         # Check that the two password entries match
         password1 = self.cleaned_data.get("password1")
