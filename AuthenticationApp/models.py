@@ -18,7 +18,7 @@ class MyUserManager(BaseUserManager):
         #Only the email field is required
         user = self.model(email=email)
         user.set_password(password)
-        user.last_name = last_name
+        
         #If first_name is not present, set it as email's username by default
         if first_name is None or first_name == "" or first_name == '':                                
             user.first_name = email[:email.find("@")]            
@@ -72,12 +72,13 @@ class MyUser(AbstractBaseUser):
         max_length=120,
         null=True,
         blank=True,
-        )    
+    )    
 
     last_name = models.CharField(
         max_length=120,
         null=True,
         blank=True,
+
         )
     contact_info = models.CharField(
         max_length=120,
@@ -124,10 +125,6 @@ class MyUser(AbstractBaseUser):
     def has_module_perms(self, app_label):        
         return True
 
-    def has_module_perms(self, app_label):        
-        return True
-
-
     @property
     def is_staff(self):
         return self.is_admin
@@ -144,7 +141,7 @@ class Student(models.Model):
         MyUser,
         on_delete=models.CASCADE,
         primary_key=True)
-    courses = models.ForeignKey('UniversitiesApp.Course',default=None,null=True)
+
     groups = models.ForeignKey('GroupsApp.Group',default=None,null=True)
     university = models.ForeignKey('UniversitiesApp.University',default=None,null=True)
     def get_full_name(self):        
@@ -165,7 +162,6 @@ class Student(models.Model):
     def has_module_perms(self, app_label):        
         return True
 
-
     @property
     def is_staff(self):
         return False
@@ -174,7 +170,9 @@ class Professor(models.Model):
     user = models.OneToOneField(
         MyUser,
         on_delete=models.CASCADE,
-        primary_key=True)
+        primary_key=True
+    )
+
     courses = models.ForeignKey('UniversitiesApp.Course',default=None,null=True)
     university = models.ForeignKey('UniversitiesApp.University',default=None,null=True)
     def get_full_name(self):        
@@ -203,10 +201,11 @@ class Engineer(models.Model):
     user = models.OneToOneField(
         MyUser,
         on_delete=models.CASCADE,
-        primary_key=True)
+        primary_key=True
+    )
+
     companies = models.ForeignKey('CompaniesApp.Company',default=None,null=True)
     projects = models.ForeignKey('ProjectsApp.Project',default=None,null=True)
-    university = models.ForeignKey('UniversitiesApp.University',default=None,null=True)
     def get_full_name(self):        
         return "%s %s" %(self.user.first_name, self.user.last_name)
 
