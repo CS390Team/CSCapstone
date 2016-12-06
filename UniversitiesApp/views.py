@@ -94,16 +94,9 @@ def unjoinUniversity(request):
     
 def getCourse(request):
 	if request.user.is_authenticated():
-		currentProf = None
-                proflist = Professor.objects.all()
-                for prof in proflist:
-                   if prof.user.email == request.user.email:
-                      currentProf = prof
-                      break
-                in_university_name = currentProf.university
+		in_university_name = request.GET.get('name', 'None')
 		in_university = models.University.objects.get(name__exact=in_university_name)
 		in_course_tag = request.GET.get('course', 'None')
-                print in_university.course_set
 		in_course = in_university.course_set.get(tag__exact=in_course_tag)
 		is_member = in_course.members.filter(email__exact=request.user.email)
 		context = {

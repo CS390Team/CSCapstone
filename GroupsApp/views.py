@@ -121,7 +121,8 @@ def addMembers(request):
                 print("user found")
                 
                 # find group
-                in_group_name = "Bridges International" # TODO: get group name
+                in_group_name = request.GET.get('name', "None")
+                # in_group_name = "Bridges International" # TODO: get group name
                 print(in_group_name)
                 in_group = models.Group.objects.get(name__exact=in_group_name)
 

@@ -60,7 +60,6 @@ class UpdateForm(forms.ModelForm):
 
     # identity = forms.ChoiceField(widget = forms.Select(), choices=[(x, x) for x in selections], initial=selections[default_index])
 
-    print("is student")
     uobjectlist = University.objects.all()
     u_list = [(None,"Select your University")]
     for item in uobjectlist:
