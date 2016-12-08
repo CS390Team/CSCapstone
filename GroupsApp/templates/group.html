@@ -10,6 +10,9 @@
 			{% if userIsMember %}
 				<a href="/group/unjoin?name={{ group.name }}" class="btn btn-default">Unjoin this Group</a>
 				<a href="/group/addmembersform?name={{ group.name }}" class="btn btn-default">Add members</a>
+				{% if hasProject == False %}
+					<a href="/group/project/all?group={{ group.name }}" class="btn btn-default">Add Project</a>
+				{% endif %}
 			{% endif %}
 		</div>
 	</div>
@@ -35,10 +38,26 @@
 			</table>
 			<br>
 
+			{% if hasProject %}
 			<h3>Project</h3>
-			<table class="table table-striped sortable">
-			</table>
-			<br>
+				<table class="table table-striped sortable">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Description</th>
+							<th>Company</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><a href="/group/project?name={{ group.project.company }}&group={{ group.name }}&project={{ group.project.name }}">{{ group.project.name }}</a></td>
+							<td>{{ group.project.description }}</td>
+							<td>{{ group.project.company }}</td>
+						</tr>
+					</tbody>
+				</table>
+				<br>
+			{% endif %}
 
 			<h3>Members</h3>
 			<table class="table table-striped sortable">

@@ -43,7 +43,6 @@ def removeComment(request):
     if request.user.is_authenticated():
         c_id = request.GET.get('id', 'None')
         group_name = request.GET.get('group','None')
-        print "c_id",c_id
         group = Group.objects.get(name__exact=group_name)
         comment = group.comment_set.get(id = int(c_id))
         comment.delete()

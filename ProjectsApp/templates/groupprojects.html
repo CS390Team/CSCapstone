@@ -1,0 +1,71 @@
+{% extends "body.html" %}
+
+{% block content %}
+	
+	<!-- Content -->
+	<div class="container theme-showcase" role="main">
+		<div class="jumbotron">
+			<h1>Projects</h1>
+		</div>
+    </div>
+	<div class="container" role="main">
+		<div class="table-responsive">
+			{% if request.user.is_student %}
+			<h3>Recommended Projects</h3>
+			<table class="table table-striped sortable">
+				<thead>
+					<tr>
+						<th> Name </th>
+						<th> Company </th>
+						<th> Group </th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for pair in recommend %}
+					<tr>
+						{% for element in pair %}
+							{% if element.is_project %}
+							<td><a href="/group/project?name={{ element.company }}&group={{ group }}&project={{ element.name }}">{{ element.name }}</a></td>
+							<td>{{ element.company }}</td>
+							{% else %}
+							<td><a href="/group?name={{ element.name }}">{{ element.name }}</a></td>
+							{% endif %}
+						{% endfor %}
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			<br>
+			<h3>All Projects</h3>
+			{% endif %}
+			
+			<table class="table table-striped sortable">
+				<thead>
+					<tr>
+						<th> Name </th>
+						<th> Description </th>
+						<th> Company </th>
+						{% if request.user.is_student %}
+						<!-- <th> Apply </th> -->
+						{% endif %}
+					</tr>
+				</thead>
+				<tbody>
+					{% for project in projects %}
+					<tr>
+						<td><a href="/group/project?name={{ project.company }}&group={{ group }}&project={{ project.name }}">{{ project.name }}</a></td>
+						<td>{{ project.description }}</td>
+						<td>{{ project.company }}</td>
+						<!-- {% if hasProject == False %} -->
+							<!-- {% if group %} -->
+							<!-- <td><a href="/project/apply?name={{ company.name }}&group={{ group }}&project={{ project.name }}">Apply</a></td> -->
+							<!-- {% endif %} -->
+						<!-- {% endif %} -->
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+{% endblock %}

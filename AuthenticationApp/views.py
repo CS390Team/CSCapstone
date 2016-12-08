@@ -114,7 +114,7 @@ def update_profile(request):
 		university_name = form.cleaned_data['university']
 		university = University.objects.get(name=university_name)
 
-		print(university.name)
+		#print(university.name)
 
 		request.user.student.university = university
 
@@ -135,8 +135,8 @@ def update_profile(request):
 def getStudents(request):
 	if request.user.is_authenticated():
 		students = models.Student.objects.all()
-		for item in students:
-			print(item.user.email)
+		#for item in students:
+		#	print(item.user.email)
 		context = {
 			'students' : students,
 		}

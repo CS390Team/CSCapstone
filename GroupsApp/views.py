@@ -11,8 +11,8 @@ from GroupsApp.models import Group
 def getGroups(request):
     if request.user.is_authenticated():
         users_list = models.MyUser.objects.all()
-        for user in users_list:
-            print("%s %s") %(user.email, user.get_full_name())
+        #for user in users_list:
+        #    print("%s %s") %(user.email, user.get_full_name())
 
         email = request.user.email
         is_student = request.user.is_student
@@ -32,10 +32,14 @@ def getGroup(request):
         in_name = request.GET.get('name', 'None')
         in_group = models.Group.objects.get(name__exact=in_name)
         is_member = in_group.members.filter(email__exact=request.user.email)
+        hasProject = False
+        if in_group.project is not None:
+            hasProject = True
         context = {
             'group' : in_group,
             'userIsMember': is_member,
-            'comments' : in_group.comment_set.all()
+            'comments' : in_group.comment_set.all(),
+            'hasProject' : hasProject
         }
         return render(request, 'group.html', context)
     # render error page if user is not logged in
@@ -69,7 +73,7 @@ def getGroupFormSuccess(request):
                 }
                 return render(request, 'groupformsuccess.html', context)
         else:
-            print("form not valid")
+            #print("form not valid")
             form = forms.GroupForm()
         return render(request, 'groupform.html')
     # render error page if user is not logged in
@@ -83,10 +87,14 @@ def joinGroup(request):
         in_group.save();
         request.user.group_set.add(in_group)
         request.user.save()
+
+        hasProject = False
+        if in_group.project is not None:
+            hasProject = True
         context = {
             'group' : in_group,
             'userIsMember': True,
-            'comments' : in_group.comment_set.all()
+            'hasProject' : hasProject
         }
         return render(request, 'group.html', context)
     return render(request, 'autherror.html')
@@ -99,10 +107,14 @@ def unjoinGroup(request):
         in_group.save();
         request.user.group_set.remove(in_group)
         request.user.save()
+
+        hasProject = False
+        if in_group.project is not None:
+            hasProject = True
         context = {
             'group' : in_group,
-            'userIsMember': False,
-            'comments' : in_group.comment_set.all()
+            'userIsMember': True,
+            'hasProject' : hasProject
         }
         return render(request, 'group.html', context)
     return render(request, 'autherror.html')
@@ -126,23 +138,23 @@ def addMembers(request):
                 # find user
                 # warn if user is not found
                 in_user_email = form.cleaned_data['email']
-                print(in_user_email)
+                #print(in_user_email)
                 if not models.MyUser.objects.filter(email__exact=in_user_email).exists():
                     return render(request, 'addmemberform.html', {'error' : 'Error: The user does not exist'})
                 
                 in_user = models.MyUser.objects.get(email__exact=in_user_email)
-                print("user found")
+                #print("user found")
                 
                 # find group
                 in_group_name = request.GET.get('name', "None")
                 # in_group_name = "Bridges International" # TODO: get group name
-                print(in_group_name)
+                #print(in_group_name)
                 in_group = models.Group.objects.get(name__exact=in_group_name)
 
                 # print out all members of the group
-                print("All members:")
-                for member in in_group.members.all():
-                    print(member.email)
+                #print("All members:")
+                #for member in in_group.members.all():
+                #    print(member.email)
                 
                 # check if user already in the group
                 if in_group.members.filter(email__exact=in_user_email):
@@ -158,10 +170,14 @@ def addMembers(request):
                 in_user.group_set.add(in_group)
                 in_user.save()
                 
+                hasProject = False
+                if in_group.project is not None:
+                    hasProject = True
                 context = {
                     'group' : in_group,
                     'userIsMember': True,
-                    'comments' : in_group.comment_set.all()
+                    'comments' : in_group.comment_set.all(),
+                    'hasProject' : hasProject
                 }
             return render(request, 'group.html', context)
         else:
