@@ -6,6 +6,7 @@ from django.shortcuts import render
 from . import models
 from . import forms
 from .models import MyUser
+from GroupsApp.models import Group
 
 def getGroups(request):
     if request.user.is_authenticated():
@@ -34,6 +35,7 @@ def getGroup(request):
         context = {
             'group' : in_group,
             'userIsMember': is_member,
+            'comments' : in_group.comment_set.all()
         }
         return render(request, 'group.html', context)
     # render error page if user is not logged in
@@ -84,6 +86,7 @@ def joinGroup(request):
         context = {
             'group' : in_group,
             'userIsMember': True,
+            'comments' : in_group.comment_set.all()
         }
         return render(request, 'group.html', context)
     return render(request, 'autherror.html')
@@ -99,6 +102,7 @@ def unjoinGroup(request):
         context = {
             'group' : in_group,
             'userIsMember': False,
+            'comments' : in_group.comment_set.all()
         }
         return render(request, 'group.html', context)
     return render(request, 'autherror.html')
@@ -157,6 +161,7 @@ def addMembers(request):
                 context = {
                     'group' : in_group,
                     'userIsMember': True,
+                    'comments' : in_group.comment_set.all()
                 }
             return render(request, 'group.html', context)
         else:

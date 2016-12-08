@@ -11,8 +11,13 @@
 			<p>{{ project.description }}</p>
 			<!--If user is the poster of this project, then can delete-->
 			{% if request.user.email == project.post_by %}
-			<a href="/project/update?name={{ company.name }}&project={{ project.name}}" class="btn btn-default">Update</a>
-			<a href="/project/remove?name={{ company.name }}&project={{ project.name}}" class="btn btn-default">Delete</a>
+				<a href="/project/update?name={{ company.name }}&project={{ project.name}}" class="btn btn-default">Update</a>
+				<a href="/project/remove?name={{ company.name }}&project={{ project.name}}" class="btn btn-default">Delete</a>
+			{% endif %}
+			{% if userMarkedProject %}
+				<a href="/project/unbookmark?name={{ company.name }}&project={{ project.name }}" class="btn btn-default">UnBookmark</a>
+			{% else %}
+				<a href="/project/bookmark?name={{ company.name }}&project={{ project.name }}" class="btn btn-default">Bookmark</a>
 			{% endif %}
 		</div>
 	</div>

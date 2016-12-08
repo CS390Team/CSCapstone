@@ -1,0 +1,33 @@
+{% extends "body.html" %}
+{% block content %}
+	<!-- Content -->
+	<div class="container theme-showcase" role="main">
+		<div class="jumbotron">
+			<h1>Bookmarks</h1>
+		</div>
+    </div>
+
+	<div class="container" role="main">
+		<div class="table-responsive">
+			<table class="table table-striped sortable">
+				<thead>
+					<tr>
+						<th> Name </th>
+						<th> Description </th>
+						<th> Company </th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for project in projects %}
+					<tr>
+						<td><a href="/project?name={{ project.company }}&project={{ project.name }}">{{ project.name }}</a></td>
+						<td>{{ project.description }}</td>
+						<td>{{ project.company }}</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+{% endblock %}

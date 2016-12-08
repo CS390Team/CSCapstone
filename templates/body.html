@@ -21,7 +21,15 @@
 					<li><a href="/register">Register</a></li>
 				{% else %}
 					<li><a href="/update">Update Profile</a></li>
-					<li><a href="/project/all">View Projects</a></li>
+					<li role="presentation" class="dropdown">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+						  	Projects <span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="/project/all">View Projects</a></li>
+							<li><a href="/project/bookmarks">Bookmarks</a></li>
+						</ul>
+					</li>
 					{% if user.is_student == True %}
 						<li><a href="/university/all">View Universities</a></li>
 						<li role="presentation" class="dropdown">

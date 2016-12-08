@@ -20,14 +20,16 @@
                 <h3>Engineers</h3>
                 <table class="table table-striped sortable">
                     <thead>
-                        <!--<tr>
-                            <th>Engineers</th>
-                        </tr>-->
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                        </tr>
                     </thead>
                     <tbody>
                         {% for item in company.members.all %}
                         <tr>
                             <td>{{ item.get_full_name }}</td>
+                            <td>{{ item.email }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -49,7 +51,7 @@
                             <td><a href="/project?name={{ company.name }}&project={{ item.name }}">{{ item.name }}</a></td>
                             <td>{{ item.created_at }}</td>
                             <td>{{ item.updated_at }}</td>
-                            <td>{{ item.post_by}}</td>
+                            <td>{{ item.post_by }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>

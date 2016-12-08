@@ -38,7 +38,7 @@ def getProjects(request):
 			pro_spe_list.append(pro_spe)
 
 			for group in group_list:
-				print "Statement"
+				score = 0
 				group_lan_list = []
 				group_lan = []
 				for char in group.languages:
@@ -89,11 +89,19 @@ def getProject(request):
 		in_company = models.Company.objects.get(name__exact=in_company_name)
 		in_project_name = request.GET.get('project', 'None')
 		in_project = in_company.project_set.get(name__exact=in_project_name)
-		#is_member = group
-		context = {
-			'company' : in_company,
-			'project' : in_project,
-		}
+		in_project_markers = in_project.markers.filter(email__exact = request.user.email)
+		if in_project_markers:
+			context = {
+				'company' : in_company,
+				'project' : in_project,
+				'userMarkedProject': True,
+			}
+		else:
+			context = {
+				'company' : in_company,
+				'project' : in_project,
+				'userMarkedProject': False,
+		   	}
 		return render(request, 'project.html', context)
 	return render(request, 'autherror.html')
 
@@ -138,7 +146,7 @@ def getProjectFormSuccess(request):
                                              experience=form.cleaned_data['experience'],
                                              speciality=form.cleaned_data['speciality'],
                                              company=in_company,
-                                             post_by=request.user.email
+                                             post_by=request.user.get_full_name()
                                              )
 					new_project.save()
 					in_company.project_set.add(new_project)
@@ -191,6 +199,50 @@ def updateProject(request):
 		'project_id' : in_project.id
 	}
 	return render(request, 'projectform.html', context)
+
+def bookmarkProject(request):
+	if request.user.is_authenticated(): 
+		in_company_name = request.GET.get('name', 'None')
+		in_company = models.Company.objects.get(name__exact=in_company_name)
+		in_project_tag = request.GET.get('project', 'None')
+		in_project = in_company.project_set.get(name__exact=in_project_tag)
+		in_project.markers.add(request.user)
+		in_project.save();
+		request.user.project_set.add(in_project)
+		request.user.save()
+		context = {
+			'company' : in_company,
+			'project' : in_project,
+			'userMarkedProject': True,
+		}
+		return render(request, 'project.html', context)
+	return render(request, 'autherror.html')
+
+def unbookmarkProject(request):
+	if request.user.is_authenticated():
+		in_company_name = request.GET.get('name', 'None')
+		in_company = models.Company.objects.get(name__exact=in_company_name)
+		in_project_tag = request.GET.get('project', 'None')
+		in_project = in_company.project_set.get(name__exact=in_project_tag)
+		in_project.markers.add(request.user)
+		in_project.save();
+		request.user.project_set.remove(in_project)
+		request.user.save()
+		context = {
+			'company' : in_company,
+			'project' : in_project,
+			'userMarkedProject': False,
+		}
+		return render(request, 'project.html', context)
+	return render(request, 'autherror.html')
+def getBookmarks(request):
+	if request.user.is_authenticated():
+		projects_list = request.user.project_set.all()
+		content = {
+			'projects' : projects_list
+		}
+		return render(request, 'bookmark.html', content)
+	return render(render, 'autherror.html')
 
 
 

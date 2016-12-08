@@ -4,6 +4,7 @@ Created by Harris Christiansen on 10/02/16.
 """
 from django.db import models
 from CompaniesApp.models import Company
+from AuthenticationApp.models import MyUser
 
 class Project(models.Model):
 	name = models.CharField(max_length=200)
@@ -18,6 +19,7 @@ class Project(models.Model):
 	speciality = models.CharField(max_length=10000)
 
 	post_by = models.CharField(max_length=100, null=True)
+	markers = models.ManyToManyField(MyUser)
 
 	is_project = models.BooleanField(default=True)
 

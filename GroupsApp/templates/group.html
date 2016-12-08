@@ -53,5 +53,34 @@
 			<br>
 		</div>
 	</div>
+        <div class="container" role="main">
+        	<div class="table-responsive">
+            	<h3>Comments</h3>
+            	<table class="table table-striped sortable">
+               		<thead>
+                    	<tr>
+                      		<th style="width: 10%">ID</th>
+                        	<th style="width: 75%">Comment</th>
+                       		<th style="width: 10%">Time</th>
+                        	<th style="width: 5%"></th>
+                    	</tr>
+               		</thead>
+                	<tbody>
+                   	{% for item in comments %}
+                   		<tr>
+                       		<td>{{ item.name }}</td>
+                       		<td>{{ item.comment }}</td>
+                       		<td>{{ item.time }}</td>
+                       	{% if request.user.email == item.post_by %}
+                           <td><a href="/removecomment?id={{ item.id }}&group={{ group.name }}" class="btn btn-default">remove comment</a></td>
+                       	{%endif%}
+                   		</tr>
+                   	{% endfor %}
+                	</tbody>
+            	</table>
+           	</div>
+         	<a href="/commentform?group={{group.name}}" class="btn btn-default">Add Comment</a><br><br><br><br>
+      </div>
+
 
 {% endblock %}
