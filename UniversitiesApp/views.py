@@ -24,6 +24,7 @@ def getUniversity(request):
         in_name = request.GET.get('name', 'None')
         in_university = models.University.objects.get(name__exact=in_name)
         is_member = in_university.members.filter(email__exact=request.user.email)
+
         context = {
             'university' : in_university,
             'userIsMember': is_member,
@@ -71,9 +72,11 @@ def joinUniversity(request):
         in_university.save();
         request.user.university_set.add(in_university)
         request.user.save()
+
         context = {
             'university' : in_university,
             'userIsMember': True,
+            'userIsProfessor' : request.user.is_professor
         }
         return render(request, 'university.html', context)
     return render(request, 'autherror.html')
@@ -86,6 +89,7 @@ def unjoinUniversity(request):
         in_university.save();
         request.user.university_set.remove(in_university)
         request.user.save()
+
         context = {
             'university' : in_university,
             'userIsMember': False,
@@ -141,13 +145,16 @@ def addCourse(request):
 				new_course = models.Course(tag=form.cleaned_data['tag'],
 										   name=form.cleaned_data['name'],
 										   description=form.cleaned_data['description'],
-										   university=in_university)
+										   university=in_university,
+										   professor=models.Professor.objects.get(user_id=request.user.id)
+										   )
 				new_course.save()
 				in_university.course_set.add(new_course)
 				is_member = in_university.members.filter(email__exact=request.user.email)
 				context = {
 					'university' : in_university,
 					'userIsMember': is_member,
+					'userIsProfessor' : request.user.is_professor
 				}
 				return render(request, 'university.html', context)
 			else:

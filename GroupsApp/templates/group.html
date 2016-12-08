@@ -8,22 +8,40 @@
 			<h1>{{ group.name }}</h1>
 			<p>{{ group.description }}</p>
 			{% if userIsMember %}
-			<a href="/group/unjoin?name={{ group.name }}" class="btn btn-default">Unjoin this Group</a>
-			<a href="/group/addmembersform?name={{ group.name }}" class="btn btn-default">Add members</a>
-			{% else %}
-			<a href="/group/join?name={{ group.name }}" class="btn btn-default">Join this Group</a>
+				<a href="/group/unjoin?name={{ group.name }}" class="btn btn-default">Unjoin this Group</a>
+				<a href="/group/addmembersform?name={{ group.name }}" class="btn btn-default">Add members</a>
 			{% endif %}
 		</div>
 	</div>
 	
 	<div class="container">
 		<div class="table-responsive">
+			<h3>Information</h3>
 			<table class="table table-striped sortable">
-				<thead>
+				<tbody>
 					<tr>
-						<th>Users</th>
+						<td>Programming Language Knowledge</td>
+						<td>{{ group.languages }}<td>
 					</tr>
-				</thead>
+					<tr>
+						<td>Years of Experience</td>
+						<td>{{ group.experience }}<td>
+					</tr>
+					<tr>
+						<td>Speciality</td>
+						<td>{{ group.speciality }}<td>
+					</tr>
+				</tbody>
+			</table>
+			<br>
+
+			<h3>Project</h3>
+			<table class="table table-striped sortable">
+			</table>
+			<br>
+
+			<h3>Members</h3>
+			<table class="table table-striped sortable">
 				<tbody>
 					{% for item in group.members.all %}
 					<tr>
@@ -32,6 +50,7 @@
 					{% endfor %}
 				</tbody>
 			</table>
+			<br>
 		</div>
 	</div>
 

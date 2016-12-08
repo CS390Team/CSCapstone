@@ -9,11 +9,13 @@
 			<h3>{{ course.name }}</h3>
 			<p>{{ course.description }}</p>
             {% if userIsProfessor %}
+
 	     		<!-- TODO: change url, add student page -->
 	     		<!-- TODO: only professor of this course can perform these actions -->
-
+	     		{% if course.professor.user.email == request.user.email %}
 	            <a href="/university/course/join?name={{ university.name }}&course={{ course.tag }}" class="btn btn-default">Add Students</a>
 	            <a href="/university/course/remove?name={{ university.name }}&course={{ course.tag }}" class="btn btn-default">Delete this Course</a>
+	            {% endif %}
             {% endif %}
 		</div>
     </div>
@@ -23,12 +25,14 @@
 				<thead>
 					<tr>
 						<th>Students</th>
+						<th>Remove</th>
 					</tr>
 				</thead>
 				<tbody>
 					{% for item in course.members.all %}
 					<tr>
 						<td>{{ item.get_full_name }}</td>
+						<td>Remove</td>
 					</tr>
 					{% endfor %}
 				</tbody>

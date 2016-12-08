@@ -10,20 +10,35 @@
 		<div class="panel panel-default">
 			<form method="post" action="/group/formsuccess" class="panel-body validate">
 				{% csrf_token %}
+
 				<label for="name">Name</label>
 				<h6 style="color:red">{{ error }}</h6>
 				<input type="text" name="name" id="name" placeholder="Name" class="form-control" data-bvalidator="required" data-bvalidator-msg="Name Required">
 				<br>
+
+				<label for="language">Programming Language</label>
+				<input type="text" name="language" id="language" placeholder="Programming Languages Known by Gourp Members" class="form-control" data-bvalidator="required" data-bvalidator-msg="Language Required"> 
+				<br>
+
+				<label for="experience">Years of Experience</label>
+				<input type="text" name="experience" id="experience" placeholder="Approximate Average Years of Experience of Gourp Members" class="form-control" data-bvalidator="required" data-bvalidator-msg="Experience Required"> 
+				<br>
+
+				<label for="speciality">Speciality</label>
+				<input type="text" name="speciality" id="speciality" placeholder="Speciality( Windows, Mac, iOS, Android, Web, Computer Vision, AI, etc)" class="form-control" data-bvalidator="required" data-bvalidator-msg="Speciality Required"> 
+				<br>
+
 				<label for="description">Group Description</label>
-				<!-- <input type="text" name="description" id="description" placeholder="Description" class="form-control" data-bvalidator="required" data-bvalidator-msg="Description Required"> -->
-				<head>
+				<input type="text" name="description" id="description" placeholder="Description" class="form-control" data-bvalidator="required" data-bvalidator-msg="Description Required"> 
+				<!--<head>
   					<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
   					<script>tinymce.init({ selector:'textarea' });</script>
 				</head>
 				<body>
   					<textarea></textarea>
-				</body>
+				</body>-->
 				<br>
+
 				<input type="submit" value="Submit" class="btn btn-primary">
 			</form>
 		</div>

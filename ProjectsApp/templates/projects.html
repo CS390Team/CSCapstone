@@ -10,13 +10,39 @@
     </div>
 	<div class="container" role="main">
 		<div class="table-responsive">
+			{% if request.user.is_student %}
+			<h3>Recommended Projects</h3>
 			<table class="table table-striped sortable">
 				<thead>
 					<tr>
-						<th> Name</th>
-						<th> Description</th>
-						<th> Company</th>
-						<th> Status</th>
+						<th> Name </th>
+						<th> Company </th>
+						<th> Group </th>
+						<th> Apply </th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><a href="/project?name={{ project.company }}&project={{ project.name }}">{{ project.name }}</a></td>
+						<td>{{ project.description }}</td>
+						<td>{{ project.company }}</td>
+						{% if request.user.is_student %}
+							<td><a href="/">Apply</a></td>
+						{% endif %}
+					</tr>
+				</tbody>
+			</table>
+			<h3>Project List</h3>
+			{% endif %}
+			<table class="table table-striped sortable">
+				<thead>
+					<tr>
+						<th> Name </th>
+						<th> Description </th>
+						<th> Company </th>
+						{% if request.user.is_student %}
+						<th> Apply </th>
+						{% endif %}
 					</tr>
 				</thead>
 				<tbody>
@@ -25,7 +51,9 @@
 						<td><a href="/project?name={{ project.company }}&project={{ project.name }}">{{ project.name }}</a></td>
 						<td>{{ project.description }}</td>
 						<td>{{ project.company }}</td>
-						<td>taken</td>
+						{% if request.user.is_student %}
+							<td><a href="/">Apply</a></td>
+						{% endif %}
 					</tr>
 					{% endfor %}
 				</tbody>

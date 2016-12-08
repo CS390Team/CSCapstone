@@ -17,11 +17,12 @@
     </div>
     <div class="container" role="main">
 		<div class="table-responsive">
+			<h3>Professors</h3>
 			<table class="table table-striped sortable">
 				<thead>
-					<tr>
-						<th>Users</th>
-					</tr>
+					<!--<tr>
+						<th>Professors</th>
+					</tr>-->
 				</thead>
 				<tbody>
 					{% for item in university.members.all %}
@@ -32,6 +33,7 @@
 				</tbody>
 			</table>
 		</div>
+		<h3>Courses</h3>
 		<div class="table-responsive">
 			<table class="table table-striped sortable">
 				<thead>
@@ -39,6 +41,7 @@
 						<th>Courses</th>
 						<th>Name</th>
 						<th>Description</th>
+						<th>Taught By</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -47,6 +50,7 @@
 						<td><a href="/university/course?name={{ university.name }}&course={{ item.tag }}">{{ item.tag }}</a></td>
 						<td><a href="/university/course?name={{ university.name }}&course={{ item.tag }}">{{ item.name }}</a></td>
 						<td>{{ item.description }}</td>
+						<td>{{ item.professor.get_full_name }}</td>
 					</tr>
 					{% endfor %}
 				</tbody>
