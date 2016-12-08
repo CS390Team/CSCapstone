@@ -5,6 +5,8 @@
     <div class="container theme-showcase" role="main">
 		<div class="jumbotron">
             <img src="/{{ university.photo }}" alt="University Image" width=150/>
+           	<h6 style="color:red">{{ error }}</h6>
+
 			<h3>{{ university.name }}</h3>
 			<p>{{ university.description }}</p>
             <h5><a href="{{ university.website }}">Website</a></h5>

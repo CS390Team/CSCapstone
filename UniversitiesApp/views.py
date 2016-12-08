@@ -68,6 +68,16 @@ def joinUniversity(request):
     if request.user.is_authenticated():
         in_name = request.GET.get('name', 'None')
         in_university = models.University.objects.get(name__exact=in_name)
+
+        if request.user.university_set.count() != 0:
+            context = {
+                'university' : in_university,
+                'userIsMember': False,
+                'userIsProfessor' : request.user.is_professor,
+                'error' : 'Error: You already joined another university!'
+            }
+            return render(request, 'university.html', context)
+        
         in_university.members.add(request.user)
         in_university.save();
         request.user.university_set.add(in_university)
@@ -79,6 +89,7 @@ def joinUniversity(request):
             'userIsProfessor' : request.user.is_professor
         }
         return render(request, 'university.html', context)
+    else:
         return render(request, 'autherror.html')
 
 def unjoinUniversity(request):
