@@ -27,6 +27,7 @@ def getUniversity(request):
         context = {
             'university' : in_university,
             'userIsMember': is_member,
+            'userIsProfessor' : request.user.is_professor
         }
         return render(request, 'university.html', context)
     # render error page if user is not logged in
@@ -102,7 +103,7 @@ def getCourse(request):
 		context = {
 			'university' : in_university,
 			'course' : in_course,
-			'userInCourse' : is_member,
+			'userIsProfessor' : request.user.is_professor,
 		}
 		return render(request, 'course.html', context)
 	return render(request, 'autherror.html')

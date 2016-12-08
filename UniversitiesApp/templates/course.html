@@ -1,24 +1,6 @@
 {% extends "body.html" %}
 
 {% block content %}
-	<nav class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container">
-			<div class="navbar-header">
-				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-					<span class="sr-only">Toggle navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="/">CS Capstone Marketplace</a>
-			</div>
-			<div id="navbar" class="navbar-collapse collapse">
-				<ul class="nav navbar-nav">
-					<li><a href="/logout">Logout</a></li>
-				</ul>
-			</div>
-		</div>
-	</nav>
 	<!-- Content -->
     <div class="container theme-showcase" role="main">
 		<div class="jumbotron">
@@ -26,12 +8,13 @@
 			<h2>{{ course.tag }}</h2>
 			<h3>{{ course.name }}</h3>
 			<p>{{ course.description }}</p>
-            {% if userInCourse %}
-            <a href="/university/course/unjoin?name={{ university.name }}&course={{ course.tag }}" class="btn btn-default">Unjoin this Course</a>
-            {% else %}
-            <a href="/university/course/join?name={{ university.name }}&course={{ course.tag }}" class="btn btn-default">Join this Course</a>
+            {% if userIsProfessor %}
+	     		<!-- TODO: change url, add student page -->
+	     		<!-- TODO: only professor of this course can perform these actions -->
+
+	            <a href="/university/course/join?name={{ university.name }}&course={{ course.tag }}" class="btn btn-default">Add Students</a>
+	            <a href="/university/course/remove?name={{ university.name }}&course={{ course.tag }}" class="btn btn-default">Delete this Course</a>
             {% endif %}
-			<a href="/university/course/remove?name={{ university.name }}&course={{ course.tag }}" class="btn btn-default">Delete this Course</a>
 		</div>
     </div>
     <div class="container" role="main">

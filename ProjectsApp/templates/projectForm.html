@@ -1,36 +1,44 @@
 {% extends "body.html" %}
+
 {% block content %}
+	<!-- Content -->
+	<div class="container" role="main">
+		<div class="jumbotron">
+			<h1 style="margin: 0px; padding: 0px;">{{ company }}</h1>
+			<h3 style="margin: 0px; padding: 0px;">Create New Project</h3>
+		</div>
+		<div class="panel panel-default">
+			<form method="post" enctype="multipart/form-data" action="/project/formsuccess?name={{ company }}&action={{ page_name }}&id={{ project_id }}" class="panel-body validate">
+				{% if page_name == 'Create' %}
+                	{% csrf_token %}
+					<label for="name">Name</label>
+                	<h6 style="color:red">{{ error }}</h6>
+					<input type="text" name="name" id="name" placeholder="Name" class="form-control" data-bvalidator="required" data-bvalidator-msg="Name Required">
+					<br>
 
-<!-- Content -->
-<div class="container" role="main">
-    <div class="jumbotron">
-        <h3 style="margin: 0px; padding: 0px;">Create Project</h3>
+						<label for="description">Project Description</label>
+					<input type="text" name="description" id="description" placeholder="Description" class="form-control" data-bvalidator="required" data-bvalidator-msg="Description Required">
+					<br>
+					
+                	<label for="language">Programming Languages</label>
+					<input type="text" name="language" id="language" placeholder="Programming Languages" class="form-control">
+					<br>
+
+					<label for="experience">Years of Experience</label>
+					<input type="text" name="experience" id="experience" placeholder="Years of Experience" class="form-control">
+					<br>
+
+					<label for="speciality">Speciality</label>
+					<input type="text" name="speciality" id="speciality" placeholder="Speciality" class="form-control">
+
+				{% elif page_name == "Update" %}
+					{% csrf_token %}
+					{{ form.as_p }}
+				{% endif %}
+
+				<br>
+				<input type="submit" value={{ button_value }} class="btn btn-primary">
+			</form>
+		</div>
     </div>
-    <div class="panel panel-default">
-        <form method="post" enctype="multipart/form-data" action="/addproject" class="panel-body validate">
-        {% csrf_token %}
-             <label for="name">Name</label>
-             <input type="text" name="name" id="name" class="form-control" data-bvalidator="required" data-bvalidator-msg="Project Name Required">
-             <br>
-
-             <label for="description">Description</label>
-             <input type="text" name="description" id="description" class="form-control" data-bvalidator="required" data-bvalidator-msg="Project Description Required">
-             <br>
-
-             <label for='language'>Programming Language Required</label>
-             <input type="text" name="language" id="language" class="form-control" data-bvalidator="required" data-bvalidator-msg="Programming Language Required">
-             <br>
-
-             <label for='exp'>Years of Experience Required</label>
-             <input type="number" name="exp" id="exp" class="form-control" data-bvalidator="required" data-bvalidator-msg="Years of Experience Required">
-             <br>
-
-             <label for='speciality'>Speciality (Ex: Windows, Mac, iOS, Android, Web ...)</label>
-             <input type="text" name="speciality" id="speciality" class="form-control" data-bvalidator="required" data-bvalidator-msg="Speciality Required">
-             <br>
-             
-             <input type="submit" value="Submit" class="btn btn-primary">
-        </form>
-    </div>
-</div>
 {% endblock %}

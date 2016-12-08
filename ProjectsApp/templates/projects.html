@@ -3,38 +3,33 @@
 {% block content %}
 	
 	<!-- Content -->
+	<div class="container theme-showcase" role="main">
+		<div class="jumbotron">
+			<h1>Project</h1>
+		</div>
+    </div>
 	<div class="container" role="main">
 		<div class="table-responsive">
-			<div class="jumbotron">
-				<h1>Projects</h1>
-			</div>
-			{% for project in projects %}
-  				<div class="page-header">
-    				<h2>{{ project.name }}</h2>      
-  				</div>
-
-				<br>
-				<label for="description">Description</label><br>
-				{{ project.description }}
-				<br>
-
-				<label for="language">Programming Language Required</label><br>
-				{{ project.pro_language}}
-				<br>
-
-				<label for="exp">Years of Experience Required</label><br>
-				{{ project.years_of_exp}}
-				<br>
-
-				<label for="speciality">Speciality</label><br>
-				{{ project.speciality}}
-				<br>
-
-				<label for="post">Post By</label><br>
-				{{ project.post_by}}
-				<br>
-				<br>
-			{% endfor %}
+			<table class="table table-striped sortable">
+				<thead>
+					<tr>
+						<th> Name</th>
+						<th> Description</th>
+						<th> Company</th>
+						<th> Status</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for project in projects %}
+					<tr>
+						<td><a href="/project?name={{ project.company }}&project={{ project.name }}">{{ project.name }}</a></td>
+						<td>{{ project.description }}</td>
+						<td>{{ project.company }}</td>
+						<td>taken</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
 		</div>
 	</div>
 

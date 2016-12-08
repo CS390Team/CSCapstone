@@ -21,9 +21,9 @@
 					<li><a href="/register">Register</a></li>
 				{% else %}
 					<li><a href="/update">Update Profile</a></li>
+					<li><a href="/project/all">View Projects</a></li>
 					{% if user.is_student == True %}
 						<li><a href="/university/all">View Universities</a></li>
-						<li><a href="/project/all">View Projects</a></li>
 						<li role="presentation" class="dropdown">
 							<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
 						  	Groups <span class="caret"></span>
@@ -34,8 +34,9 @@
 							</ul>
 						</li>
 					{% elif user.is_professor == True %}
-						<li><a href="/students">View Students</a></li>
+						<!-- <li><a href="/students">View Students</a></li> -->
 						<li><a href="/university/all">View Universities</a></li>
+						<li><a href="/university/courses">View Courses</a></li>
 						<!-- <li role="presentation" class="dropdown">
 							<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
 						  	Classes <span class="caret"></span>
@@ -48,20 +49,10 @@
 					{% elif user.is_engineer == True %}
 						<li role="presentation" class="dropdown">
 							<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-						  	Projects <span class="caret"></span>
-							</a>
-							<ul class="dropdown-menu">
-								<li><a href="/project/all">View All Projects</a></li>
-								<li><a href="/project">View My Projects</a></li>
-								<li><a href="/project/form">Create Project</a></li>
-							</ul>
-						</li>
-						<li role="presentation" class="dropdown">
-							<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
 						  	Companies <span class="caret"></span>
 							</a>
 							<ul class="dropdown-menu">
-								<li><a href="/company/all">Manege Companies</a></li>
+								<li><a href="/company/all">View Companies</a></li>
 								<li><a href="/company/form">Create Company</a></li>
 							</ul>
 						</li>
