@@ -7,9 +7,78 @@ from django.shortcuts import render
 from . import models
 from . import forms
 from datetime import datetime
+from GroupsApp.models import Group
 
 def getProjects(request):
 	projects_list = models.Project.objects.all()
+	group_list = Group.objects.all()
+	if request.user.is_student:
+		recommend = []
+		for project in projects_list:
+			score=0
+
+			pro_lan_list = []
+			pro_lan = []
+			for char in project.language:
+				if char == ',':
+					pro_lan_list.append(pro_lan)
+					pro_lan = []
+				else:
+					pro_lan.append(char)
+			pro_lan_list.append(pro_lan)
+
+			pro_spe_list = []
+			pro_spe = []
+			for char in project.speciality:
+				if char == ',':
+					pro_spe_list.append(pro_spe)
+					pro_spe = []
+				else:
+					pro_spe.append(char)
+			pro_spe_list.append(pro_spe)
+
+			for group in group_list:
+				print "Statement"
+				group_lan_list = []
+				group_lan = []
+				for char in group.languages:
+					if char == ',':
+						group_lan_list.append(group_lan)
+						group_lan = []
+					else:
+						group_lan.append(char)
+				group_lan_list.append(group_lan)
+
+				group_spe_list = []
+				group_spe = []
+				for char in group.speciality:
+					if char == ',':
+						group_spe_list.append(group_spe)
+						group_spe = []
+					else:
+						group_spe.append(char)
+				group_spe_list.append(group_spe)
+				
+				if (group.members.filter(email__exact=request.user.email)):
+					for p_lan in pro_lan_list:
+						for g_lan in group_lan_list:
+							if p_lan == g_lan:
+								score = score + 1
+					if float(project.experience) <= float(group.experience):
+						score = score + 1
+					for p_spe in pro_spe_list:
+						for g_spe in group_spe_list:
+							if p_spe == g_spe:
+								score = score + 1
+				if score > 0:
+					pair = []
+					pair.append(project)
+					pair.append(group)
+					recommend.append(pair) 
+					print group.name
+
+		return render(request, 'projects.html', {'projects' : projects_list,'recommend' : recommend})
+
 	return render(request, 'projects.html', {
         'projects': projects_list,
     })
@@ -110,11 +179,9 @@ def updateProject(request):
 	in_company = models.Company.objects.get(name__exact=in_company_name)
 	form=forms.UpdateForm(request.POST or None, instance=in_project)
 	if form.is_valid():
-		print "this statement"
 		form.save()
 		messange.success(request, 'Success, project was saved!')
 
-	print "those statement"
 	context = {
 		'form' : form,
 		'page_name' : 'Update',

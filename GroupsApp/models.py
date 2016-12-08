@@ -16,6 +16,8 @@ class Group(models.Model):
     languages = models.CharField(max_length=100, null=True)
     experience = models.CharField(max_length=20, null=True)
     speciality = models.CharField(max_length=200, null=True)
+
+    is_project = models.BooleanField(default=False)
     
     def __str__(self):
         return self.name
