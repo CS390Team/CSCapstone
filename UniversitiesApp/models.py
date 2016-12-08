@@ -22,7 +22,7 @@ class Course(models.Model):
 	name = models.CharField(max_length=50)
 	description = models.CharField(max_length=300)
 	university = models.ForeignKey(University, on_delete=models.CASCADE)
-	# professor = models.ForeignKey(Professor,default=None,null=True)
+	professor = models.ForeignKey(Professor,default=None,null=True)
 	members = models.ManyToManyField(MyUser)
 
 	def __str__(self):
